@@ -1,0 +1,1 @@
+from stednavn import Stednavn
