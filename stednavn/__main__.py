@@ -1,0 +1,3 @@
+import stednavn
+
+stednavn.main()
