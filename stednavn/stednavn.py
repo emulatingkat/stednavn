@@ -2,7 +2,10 @@
 """
 
 Usage:
-  stednavn <filename>
+  stednavn [options] <filename>
+
+Options:
+  -h --help  Help message
 
 
 Description
@@ -46,6 +49,7 @@ class Stednavn(object):
         """Read placename data from data file.
 
         This function relies on a file with placenames.
+        It sets up the `placenames` attribute.
 
         """
         filename = join(dirname(__file__), 'data', 'stednavne.tsv')
@@ -60,7 +64,14 @@ class Stednavn(object):
                     self.placenames.append(placename)
 
     def setup_pattern(self):
-        """Setup regular expression for placename matching."""
+        """Setup regular expression for placename matching.
+
+        This method sets up the `pattern` attribute with compiled
+        regular expression.
+
+        This is called during initialization, and can be called again if 
+
+        """
         self.placenames.sort(key=lambda placename: len(placename), reverse=True)
         # Build regular expression
         tokens = [re.escape(placename) for placename in self.placenames]
@@ -74,6 +85,11 @@ class Stednavn(object):
         ----------
         filename : str
             Filename for text where placenames should be extracted.
+
+        Returns
+        -------
+        placenames : list of str
+            List of strings representing placenames.
 
         """
         with open(filename) as fid:
