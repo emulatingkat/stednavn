@@ -31,6 +31,10 @@ SELECT ?place ?placeLabel WHERE {
 
 from __future__ import absolute_import, division, print_function
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 import codecs
 
 from os.path import dirname, join
