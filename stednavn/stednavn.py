@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""
+"""Stednavn.
 
 Usage:
   stednavn [options] <filename>
@@ -31,6 +31,8 @@ SELECT ?place ?placeLabel WHERE {
 
 from __future__ import absolute_import, division, print_function
 
+import codecs
+
 from os.path import dirname, join
 
 import pandas as pd
@@ -61,7 +63,7 @@ class Stednavn(object):
                 index = placename.find(' (')
                 if index != -1:
                     placename = placename[:index]
-                    self.placenames.append(placename)
+                self.placenames.append(placename)
 
     def setup_pattern(self):
         """Setup regular expression for placename matching.
@@ -78,7 +80,7 @@ class Stednavn(object):
         regexp = r'(\b(?:' + r"|".join(tokens) + r')\b)'
         self.pattern = re.compile(regexp, flags=re.UNICODE)
 
-    def extract_placenames(self, filename):
+    def extract_placenames(self, filename, encoding='utf-8'):
         """Extract placenames for file.
 
         Parameters
@@ -92,7 +94,7 @@ class Stednavn(object):
             List of strings representing placenames.
 
         """
-        with open(filename) as fid:
+        with codecs.open(filename, encoding=encoding) as fid:
             text = fid.read()
             text = re.sub('\n', ' ', text)
 
