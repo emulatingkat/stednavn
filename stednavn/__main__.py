@@ -1,3 +1,3 @@
-import stednavn
+from . import stednavn
 
 stednavn.main()
