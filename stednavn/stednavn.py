@@ -114,7 +114,7 @@ class Stednavn(object):
 
         text = re.sub(r'\r\n', '\n', text)
 
-        # Erase newlines, except if in states of line
+        # Erase newlines, except if in start of line
         text = re.sub(r'(?!^)\n', ' ', text,
                       flags=re.MULTILINE | re.UNICODE)
             
