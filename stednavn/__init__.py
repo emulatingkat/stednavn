@@ -1,1 +1,1 @@
-from stednavn import Stednavn
+from .stednavn import Stednavn
