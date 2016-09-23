@@ -44,14 +44,27 @@ class Stednavn(object):
     """Extractor of placenames."""
 
     def __init__(self, language="da"):
+        self.setup_stopwords()
         self.setup_placenames()
         self.setup_pattern()
+
+    def setup_stopwords(self):
+        """Read stopword from data file and setup variable."""
+        filename = join(dirname(__file__), 'data', 'stopwords-da.txt')
+        with codecs.open(filename, encoding='utf-8') as fid:
+            self.stopwords = set([word.strip()
+                                  for word in fid.readlines()])
         
-    def setup_placenames(self):
+    def setup_placenames(self, exclude_stopwords=True):
         """Read placename data from data file.
 
         This function relies on a file with placenames.
         It sets up the `placenames` attribute.
+
+        Parameters
+        ----------
+        exclude_stopwords : bool
+            Whether to exclude stopwords from the placenames.
 
         """
         filename = join(dirname(__file__), 'data', 'stednavne.tsv')
@@ -63,6 +76,8 @@ class Stednavn(object):
                 index = placename.find(' (')
                 if index != -1:
                     placename = placename[:index]
+                if exclude_stopwords and placename in self.stopwords:
+                    continue
                 self.placenames.append(placename)
 
     def setup_pattern(self):
@@ -96,7 +111,15 @@ class Stednavn(object):
         """
         with codecs.open(filename, encoding=encoding) as fid:
             text = fid.read()
-            text = re.sub('\n', ' ', text)
+
+        text = re.sub(r'\r\n', '\n', text)
+
+        # Erase newlines, except if in states of line
+        text = re.sub(r'(?!^)\n', ' ', text,
+                      flags=re.MULTILINE | re.UNICODE)
+            
+        # Erase consecutive whitespaces
+        text = re.sub(r' +', ' ', text)
 
         matches = self.pattern.findall(text)
         return matches
