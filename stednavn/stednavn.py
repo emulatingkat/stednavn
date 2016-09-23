@@ -80,7 +80,7 @@ class Stednavn(object):
         regexp = r'(\b(?:' + r"|".join(tokens) + r')\b)'
         self.pattern = re.compile(regexp, flags=re.UNICODE)
 
-    def extract_placenames(self, filename, encoding='utf-8'):
+    def extract_placenames_from_file(self, filename, encoding='utf-8'):
         """Extract placenames for file.
 
         Parameters
@@ -101,6 +101,23 @@ class Stednavn(object):
         matches = self.pattern.findall(text)
         return matches
 
+    def extract_placenames_from_string(self, text):
+        """Extract placenames from string.
+
+        Parameters
+        ----------
+        text : str
+            String with text where placenames should be extracted from.
+
+        Returns
+        -------
+        placenames : list of str
+            List of strings representing placenames.
+
+        """
+        matches = self.pattern.findall(text)
+        return matches
+
 
 def main():
     """Command-line interface."""
@@ -108,8 +125,9 @@ def main():
 
     arguments = docopt(__doc__)
     stednavn = Stednavn()
-    placenames = stednavn.extract_placenames(arguments['<filename>'])
-    print("\n".join(placenames))
+    placenames = stednavn.extract_placenames_from_file(
+        arguments['<filename>'])
+    print("\n".join(placenames).encode('utf-8'))
 
 
 if __name__ == '__main__':
